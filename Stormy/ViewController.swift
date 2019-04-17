@@ -11,6 +11,8 @@ class ViewController: UIViewController {
     @IBOutlet weak var currentSummaryLabel: UILabel!
     @IBOutlet weak var refreshButton: UIButton!
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
+    
+    fileprivate let darkSkyApiKey = "ee665144eef0ffd3a16a6668cbf22578"
 
     override func viewDidLoad() {
         super.viewDidLoad()
