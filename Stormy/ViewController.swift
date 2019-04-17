@@ -1,10 +1,4 @@
-//
-//  ViewController.swift
-//  Stormy
-//
-//  Created by Pasan Premaratne on 5/8/18.
-//  Copyright © 2018 Treehouse. All rights reserved.
-//
+
 
 import UIKit
 
