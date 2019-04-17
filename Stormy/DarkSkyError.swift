@@ -10,4 +10,8 @@ import Foundation
 
 enum DarkSkyError: Error {
     case requestFailed
+    case responseUnsuccessfull(statusCode: Int)
+    case invalidData
+    case jsonParsingFailure
+    case invalidUrl
 }
