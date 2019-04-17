@@ -17,7 +17,10 @@ class DarkSkyAPIClient {
     
     let downloader = JSONDownloader()
     
-    func getCurrentWeather(at coordinate: Coordinate, completionHandler completion: @escaping( CurrentWeather?, DarkSkyError?) -> Void) {
+    typealias WeatherCompletionHandler = (Weather?, DarkSkyError?) -> Void
+    typealias CurrentWeatherCompletionHandler = (CurrentWeather?, DarkSkyError?) -> Void
+    
+    private func getWeather(at coordinate: Coordinate, completionHandler completion: @escaping WeatherCompletionHandler) {
         
         guard let url = URL(string: coordinate.description, relativeTo: baseUrl) else {
             completion(nil, .invalidUrl)
@@ -27,7 +30,26 @@ class DarkSkyAPIClient {
         let request = URLRequest(url: url)
         
         let task = downloader.jsonTask(with: request) { json, error in
-            
+            DispatchQueue.main.async {
+                guard let json = json else {
+                    completion(nil, error)
+                    return
+                }
+                
+                guard let weather = Weather(json: json) else {
+                    completion(nil, .jsonParsingFailure)
+                    return
+                }
+                completion(weather, nil)
+            }
+        }
+        
+        task.resume()
+    }
+    
+    func getCurrentWeather(at coordinate: Coordinate, completionHandler completion: @escaping CurrentWeatherCompletionHandler) {
+        getWeather(at: coordinate) {weather, error in
+            completion(weather?.currently, error)
         }
     }
 }
